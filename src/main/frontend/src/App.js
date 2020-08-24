@@ -6,8 +6,8 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            speakers: [],
             sessions: [],
+            speakers: [],
             isLoaded: false
         }
 
@@ -25,7 +25,6 @@ class App extends React.Component {
             }).catch((err) => {
             console.log(err);
         });
-
     }
 
     render() {
@@ -38,10 +37,13 @@ class App extends React.Component {
         return (
             <div className="App">
                 <ul>
-                    {sessions.map(item => (
-                        <li key={item.id}>
-                            Name: {item.name} | Email: {item.email}
+                    {sessions.map(session => (
+                        <li key={session.session_id}>
+                            {console.log(session.speakers.map(s => s.first_name))}
+                            Session name: {session.session_name} | Session description: {session.session_description} |
+                            Session speakers: {session.speakers.map(speaker => speaker.first_name)}
                         </li>
+
                     ))}
                 </ul>
             </div>
