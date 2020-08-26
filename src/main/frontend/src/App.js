@@ -1,6 +1,12 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
+
 
 class App extends React.Component {
+
     constructor(props) {
 
         super(props);
@@ -8,13 +14,11 @@ class App extends React.Component {
         this.state = {
             sessions: [],
             speakers: [],
-            isLoaded: false
+            isLoaded: false,
         }
-
     }
 
     componentDidMount() {
-
         fetch('http://localhost:8080/api/v1/sessions')
             .then(res => res.json())
             .then(json => {
@@ -32,21 +36,33 @@ class App extends React.Component {
         const {isLoaded, sessions} = this.state;
 
         if (!isLoaded)
-            return <div>Loading...</div>;
+            return <div>
+                <Button variant="primary" disabled>
+                    <Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    Loading...
+                </Button>
+            </div>;
 
         return (
-            <div className="App">
-                <ul>
-                    {sessions.map(session => (
-                        <li key={session.session_id}>
-                            {console.log(session.speakers.map(s => s.first_name))}
-                            Session name: {session.session_name} | Session description: {session.session_description} |
-                            Session speakers: {session.speakers.map(speaker => speaker.first_name)}
-                        </li>
-
-                    ))}
-                </ul>
-            </div>
+            <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Sessions
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                        {sessions.map(session => (
+                            <Dropdown.Item key={session.session_id}>
+                                {console.log(session.speakers.map(s => s.first_name))}
+                                {session.session_name}
+                            </Dropdown.Item>
+                        ))}
+                </Dropdown.Menu>
+            </Dropdown>
         );
 
     }
